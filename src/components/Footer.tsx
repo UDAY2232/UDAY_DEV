@@ -1,9 +1,16 @@
+import { motion } from "framer-motion";
+
 const Footer = () => (
-  <footer className="py-8 px-6 text-center border-t border-border">
-    <p className="text-xs text-muted-foreground">
-      © {new Date().getFullYear()} Uday. Built with React & Tailwind CSS.
+  <motion.footer
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+    viewport={{ once: true }}
+    className="py-10 px-6 text-center border-t border-border"
+  >
+    <p className="text-xs text-muted-foreground tracking-wide">
+      © {new Date().getFullYear()} Uday. Crafted with care using React & Tailwind CSS.
     </p>
-  </footer>
+  </motion.footer>
 );
 
 export default Footer;
