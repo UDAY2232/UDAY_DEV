@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" fill="none">
+  <rect width="1280" height="720" fill="#090909"/>
+  <rect x="96" y="76" width="1088" height="568" rx="28" fill="#121212" stroke="#8B5CF6" stroke-opacity="0.45"/>
+  <path d="M260 470C360 240 530 230 640 360C760 500 910 500 1020 280" stroke="#3B82F6" stroke-width="24" stroke-linecap="round" stroke-opacity="0.5"/>
+  <text x="640" y="390" fill="#FFFFFF" font-size="56" font-family="Plus Jakarta Sans, Arial, sans-serif" text-anchor="middle">CODE_AI</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B0B0B"/>
+      <stop offset="1" stop-color="#141414"/>
+    </linearGradient>
+    <linearGradient id="stroke" x1="120" y1="80" x2="1160" y2="640" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#8B5CF6" stop-opacity="0.7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <rect x="120" y="80" width="1040" height="560" rx="28" fill="#111111" stroke="url(#stroke)" stroke-opacity="0.45"/>
+  <text x="640" y="350" fill="#FFFFFF" font-size="44" font-family="Plus Jakarta Sans, Arial, sans-serif" text-anchor="middle">Project Preview</text>
+  <text x="640" y="405" fill="#A3A3A3" font-size="24" font-family="JetBrains Mono, monospace" text-anchor="middle">add custom screenshot in /public/images</text>
+</svg>

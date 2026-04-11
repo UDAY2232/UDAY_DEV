@@ -2,29 +2,38 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Github, Linkedin, Send } from "lucide-react";
 import SectionHeading from "./SectionHeading";
+import { contactLinks } from "@/data/portfolio";
 
 const socials = [
-  { icon: Mail, label: "Email", href: "mailto:uday@example.com" },
-  { icon: Github, label: "GitHub", href: "https://github.com/UDAY2232" },
-  { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/in/" },
+  { icon: Mail, label: "Email", href: contactLinks[0].href },
+  { icon: Github, label: "GitHub", href: contactLinks[1].href },
+  { icon: Linkedin, label: "LinkedIn", href: contactLinks[2].href },
 ];
 
 const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [sent, setSent] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Message sent! (Integration pending)");
+
+    const subject = encodeURIComponent(`Portfolio contact from ${form.name}`);
+    const body = encodeURIComponent(`${form.message}\n\nFrom: ${form.name} (${form.email})`);
+    window.location.href = `mailto:chirrauday2232@gmail.com?subject=${subject}&body=${body}`;
+
+    setSent(true);
     setForm({ name: "", email: "", message: "" });
+
+    setTimeout(() => setSent(false), 2500);
   };
 
   const inputClasses =
     "w-full px-5 py-3.5 rounded-xl bg-card border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-foreground/10 focus:border-foreground/20 transition-all duration-300";
 
   return (
-    <section id="contact" className="section-padding section-alt relative">
-      <div className="max-w-4xl mx-auto relative z-10">
-        <SectionHeading title="Contact" subtitle="Let's connect" />
+    <section id="contact" className="section-padding section-alt">
+      <div className="max-w-5xl mx-auto">
+        <SectionHeading title="Contact" subtitle="Let’s connect for opportunities, collaboration, or tech conversations." />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -32,9 +41,9 @@ const Contact = () => {
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-sm text-muted-foreground leading-relaxed mb-8 font-light">
-              I'm always open to new opportunities, collaborations, or just a friendly conversation.
-              Feel free to reach out — I'd love to hear from you.
+            <p className="text-sm text-muted-foreground leading-relaxed mb-8">
+              I am open to internships, full-time roles, and impactful developer collaborations. Feel free
+              to reach out through email or social platforms.
             </p>
             <div className="flex gap-3">
               {socials.map((s) => (
@@ -90,11 +99,13 @@ const Contact = () => {
               type="submit"
               whileHover={{ scale: 1.03, boxShadow: "0 10px 40px hsl(0 0% 0% / 0.12)" }}
               whileTap={{ scale: 0.97 }}
-              className="flex items-center gap-2 px-8 py-3.5 rounded-full bg-primary text-primary-foreground text-sm font-medium transition-shadow duration-300"
+              className="flex items-center gap-2 px-8 py-3.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold transition-shadow duration-300"
             >
               <Send className="w-4 h-4" />
               Send Message
             </motion.button>
+
+            {sent && <p className="text-sm text-muted-foreground">Mail client opened with your message draft.</p>}
           </motion.form>
         </div>
       </div>

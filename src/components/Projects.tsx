@@ -10,6 +10,8 @@ interface Repo {
   html_url: string;
   language: string | null;
   stargazers_count: number;
+  fork: boolean;
+  updated_at: string;
 }
 
 const container = {
@@ -18,8 +20,21 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: "easeOut" as const } },
+  hidden: { opacity: 0, y: 34, scale: 0.98 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.45, ease: "easeOut" as const } },
+};
+
+const projectImages: Record<string, string> = {
+  "code-genie-pro": "/images/code-genie-pro.svg",
+  code_ai: "/images/code-ai.svg",
+  "fuel-flow-manager": "/images/fuel-flow-manager.svg",
+  "ember-cart": "/images/ember-cart.svg",
+  parcelflow: "/images/parcelflow.svg",
+};
+
+const getProjectImage = (repoName: string) => {
+  const normalized = repoName.trim().toLowerCase();
+  return projectImages[normalized] ?? "/images/default.svg";
 };
 
 const Projects = () => {
@@ -30,20 +45,25 @@ const Projects = () => {
     fetch("https://api.github.com/users/UDAY2232/repos?sort=updated&per_page=6")
       .then((r) => r.json())
       .then((data) => {
-        setRepos(Array.isArray(data) ? data : []);
+        const parsed = Array.isArray(data) ? (data as Repo[]) : [];
+        const filtered = parsed
+          .filter((repo) => !repo.fork)
+          .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+          .slice(0, 6);
+        setRepos(filtered);
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, []);
 
   return (
-    <section id="projects" className="section-padding relative">
-      <div className="max-w-5xl mx-auto relative z-10">
-        <SectionHeading title="Projects" subtitle="Things I've built" />
+    <section id="projects" className="section-padding">
+      <div className="max-w-5xl mx-auto">
+        <SectionHeading title="Projects" subtitle="Live code snapshots from my GitHub repositories." />
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-52 rounded-2xl bg-muted animate-pulse" />
+              <div key={i} className="h-72 rounded-2xl bg-card animate-pulse border border-border" />
             ))}
           </div>
         ) : (
@@ -55,44 +75,66 @@ const Projects = () => {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {repos.map((repo) => (
-              <motion.a
+              <motion.article
                 key={repo.id}
-                href={repo.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
                 variants={item}
-                whileHover={{ y: -6, boxShadow: "0 20px 60px hsl(0 0% 0% / 0.08)" }}
-                className="group block p-6 rounded-2xl border border-border bg-card hover:border-foreground/20 transition-all duration-300"
+                whileHover={{ y: -8 }}
+                className="card-lift group relative overflow-hidden rounded-2xl border border-border bg-card"
               >
-                {/* Placeholder image area */}
-                <div className="w-full h-24 rounded-lg bg-secondary mb-4 overflow-hidden flex items-center justify-center group-hover:bg-muted transition-colors duration-300">
-                  <Code2Icon name={repo.name} />
+                <div className="relative aspect-video overflow-hidden border-b border-border">
+                  <img
+                    src={getProjectImage(repo.name)}
+                    alt={`${repo.name} preview`}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
                 </div>
 
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-sm font-semibold text-foreground group-hover:underline underline-offset-4 decoration-foreground/30">
-                    {repo.name}
-                  </h3>
-                  <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-y-1 group-hover:translate-y-0" />
+                <div className="p-5">
+                  <div className="flex items-start justify-between mb-2 gap-3">
+                    <h3 className="text-base font-semibold text-foreground line-clamp-1">{repo.name}</h3>
+                    {repo.stargazers_count > 0 && (
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Star className="w-3 h-3 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">{repo.stargazers_count}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 min-h-[4.25rem]">
+                    {repo.description || "No description available."}
+                  </p>
+
+                  <div className="mt-4 flex items-center gap-3">
+                    {repo.language && (
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "hsl(var(--accent-purple))" }} />
+                        <span className="text-xs text-muted-foreground">{repo.language}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <a
+                    href={repo.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="accent-link mt-5 inline-flex items-center gap-2 text-sm font-semibold"
+                  >
+                    GitHub
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 mb-4">
-                  {repo.description || "No description available."}
-                </p>
-                <div className="flex items-center gap-3">
-                  {repo.language && (
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-foreground/40" />
-                      <span className="text-xs text-muted-foreground">{repo.language}</span>
-                    </div>
-                  )}
-                  {repo.stargazers_count > 0 && (
-                    <div className="flex items-center gap-1">
-                      <Star className="w-3 h-3 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">{repo.stargazers_count}</span>
-                    </div>
-                  )}
-                </div>
-              </motion.a>
+
+                <div
+                  className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ boxShadow: "inset 0 0 0 1px hsl(var(--accent-blue) / 0.55)" }}
+                />
+                <div
+                  className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ boxShadow: "0 0 34px hsl(var(--accent-purple) / 0.14)" }}
+                />
+              </motion.article>
             ))}
           </motion.div>
         )}
@@ -100,12 +142,5 @@ const Projects = () => {
     </section>
   );
 };
-
-// Simple icon placeholder for project cards
-const Code2Icon = ({ name }: { name: string }) => (
-  <span className="text-2xl font-bold text-foreground/10 group-hover:text-foreground/20 transition-colors duration-300 select-none">
-    {name.charAt(0).toUpperCase()}
-  </span>
-);
 
 export default Projects;

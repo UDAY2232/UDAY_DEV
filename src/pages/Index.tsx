@@ -7,24 +7,21 @@ import Experience from "@/components/Experience";
 import Achievements from "@/components/Achievements";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import FloatingBlobs from "@/components/FloatingBlobs";
+import CursorGlow from "@/components/CursorGlow";
 
 const Index = () => (
-  <div className="noise-overlay relative">
+  <div className="relative overflow-x-hidden">
+    <CursorGlow />
     <Navbar />
-    <Hero />
-    <About />
-    <div className="relative">
-      <FloatingBlobs />
+    <main className="relative z-10">
+      <Hero />
+      <About />
       <Skills />
-    </div>
-    <Projects />
-    <div className="relative">
-      <FloatingBlobs />
+      <Projects />
       <Experience />
-    </div>
-    <Achievements />
-    <Contact />
+      <Achievements />
+      <Contact />
+    </main>
     <Footer />
   </div>
 );

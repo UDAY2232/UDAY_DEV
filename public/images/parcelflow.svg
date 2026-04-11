@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" fill="none">
+  <rect width="1280" height="720" fill="#0A0A0A"/>
+  <rect x="90" y="70" width="1100" height="580" rx="28" fill="#111111" stroke="#3B82F6" stroke-opacity="0.4"/>
+  <rect x="260" y="240" width="230" height="230" rx="16" fill="#181818"/>
+  <rect x="525" y="240" width="230" height="230" rx="16" fill="#181818"/>
+  <rect x="790" y="240" width="230" height="230" rx="16" fill="#181818"/>
+  <path d="M260 530H1020" stroke="#8B5CF6" stroke-opacity="0.6" stroke-width="8" stroke-linecap="round"/>
+  <text x="640" y="190" fill="#FFFFFF" font-size="52" font-family="Plus Jakarta Sans, Arial, sans-serif" text-anchor="middle">ParcelFlow</text>
+</svg>

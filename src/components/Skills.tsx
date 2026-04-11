@@ -1,14 +1,6 @@
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
-import { Code2, Layout, Server, Wrench, Brain } from "lucide-react";
-
-const categories = [
-  { name: "Languages", icon: Code2, items: ["Java", "Python", "C"] },
-  { name: "Frontend", icon: Layout, items: ["HTML", "CSS", "JavaScript", "React.js"] },
-  { name: "Backend", icon: Server, items: ["Node.js", "Express.js", "MySQL"] },
-  { name: "Tools", icon: Wrench, items: ["Git", "GitHub", "Docker", "AWS"] },
-  { name: "Machine Learning", icon: Brain, items: ["CNN", "SVM", "Random Forest"] },
-];
+import { skills } from "@/data/portfolio";
 
 const container = {
   hidden: {},
@@ -17,42 +9,29 @@ const container = {
 
 const item = {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45 } },
 };
 
 const Skills = () => (
-  <section id="skills" className="section-padding section-alt relative">
-    <div className="max-w-4xl mx-auto relative z-10">
-      <SectionHeading title="Skills" subtitle="Technologies I work with" />
+  <section id="skills" className="section-padding section-alt">
+    <div className="max-w-5xl mx-auto">
+      <SectionHeading title="Skills" subtitle="Technologies and tools I work with regularly." />
       <motion.div
         variants={container}
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: "-50px" }}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4"
       >
-        {categories.map((cat) => (
+        {skills.map((skill) => (
           <motion.div
-            key={cat.name}
+            key={skill}
             variants={item}
-            className="skill-glow p-6 rounded-2xl bg-card border border-border cursor-default"
+            whileHover={{ scale: 1.03 }}
+            className="card-lift rounded-xl border border-border bg-card px-4 py-3 text-sm md:text-base"
           >
-            <div className="flex items-center gap-3 mb-5">
-              <div className="p-2 rounded-lg bg-secondary">
-                <cat.icon className="w-4 h-4 text-foreground" />
-              </div>
-              <h3 className="text-sm font-semibold tracking-wide uppercase text-foreground">{cat.name}</h3>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {cat.items.map((s) => (
-                <span
-                  key={s}
-                  className="px-3 py-1.5 text-xs font-medium rounded-full bg-secondary text-secondary-foreground hover:bg-foreground hover:text-background transition-colors duration-200"
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
+            <p className="font-medium text-foreground">{skill}</p>
+            <div className="mt-2 h-[2px] w-8 rounded-full bg-gradient-to-r from-blue-500/40 to-violet-500/40" />
           </motion.div>
         ))}
       </motion.div>

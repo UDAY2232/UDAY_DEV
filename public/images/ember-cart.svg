@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" fill="none">
+  <rect width="1280" height="720" fill="#090909"/>
+  <rect x="90" y="70" width="1100" height="580" rx="28" fill="#111111" stroke="#8B5CF6" stroke-opacity="0.4"/>
+  <path d="M350 260H930L880 430H420L350 260Z" fill="#181818" stroke="#3B82F6" stroke-opacity="0.5" stroke-width="8"/>
+  <circle cx="500" cy="500" r="42" fill="#1F1F1F" stroke="#3B82F6" stroke-opacity="0.55" stroke-width="8"/>
+  <circle cx="810" cy="500" r="42" fill="#1F1F1F" stroke="#8B5CF6" stroke-opacity="0.55" stroke-width="8"/>
+  <text x="640" y="190" fill="#FFFFFF" font-size="52" font-family="Plus Jakarta Sans, Arial, sans-serif" text-anchor="middle">Ember Cart</text>
+</svg>

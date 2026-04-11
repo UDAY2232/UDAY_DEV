@@ -1,35 +1,40 @@
 import { useEffect, useState } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
-
-const links = ["About", "Skills", "Projects", "Experience", "Achievements", "Contact"];
+import { navItems } from "@/data/portfolio";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
+  const [activeSection, setActiveSection] = useState("about");
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
-      // Detect active section
-      const sections = links.map((l) => document.getElementById(l.toLowerCase()));
+      const sections = navItems.map((item) => document.getElementById(item.id));
       let current = "";
       sections.forEach((section) => {
         if (section) {
           const rect = section.getBoundingClientRect();
-          if (rect.top <= 150) current = section.id;
+          if (rect.top <= 160) {
+            current = section.id;
+          }
         }
       });
-      setActiveSection(current);
+      if (current) {
+        setActiveSection(current);
+      }
     };
+
     window.addEventListener("scroll", onScroll);
+    onScroll();
+
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const scrollTo = (id: string) => {
-    document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     setMobileOpen(false);
   };
 
@@ -43,39 +48,44 @@ const Navbar = () => {
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.6 }}
-        className={`fixed top-[2px] left-0 right-0 z-50 transition-all duration-500 ${
+        transition={{ duration: 0.55 }}
+        className={`fixed top-[2px] left-0 right-0 z-50 transition-all duration-400 ${
           scrolled
-            ? "bg-background/70 backdrop-blur-2xl border-b border-border/50 shadow-[0_1px_30px_hsl(0_0%_0%/0.05)]"
+            ? "bg-background/75 backdrop-blur-xl border-b border-border/80 shadow-[0_10px_30px_hsl(0_0%_0%/0.07)]"
             : "bg-transparent"
         }`}
       >
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="text-lg font-bold tracking-tight text-foreground"
+            className="inline-flex items-center gap-2 text-lg font-bold tracking-tight text-foreground"
           >
-            Uday<span className="text-muted-foreground">.</span>
+            <img
+              src="/images/code-ai-mark.svg"
+              alt="Logo"
+              className="h-7 w-7 rounded-full border border-border/80"
+            />
+            Uday<span className="text-gradient">.</span>
           </motion.button>
 
           <div className="hidden md:flex items-center gap-8">
-            {links.map((l) => (
+            {navItems.map((item) => (
               <button
-                key={l}
-                onClick={() => scrollTo(l)}
+                key={item.id}
+                onClick={() => scrollTo(item.id)}
                 className={`relative text-sm transition-colors duration-200 ${
-                  activeSection === l.toLowerCase()
+                  activeSection === item.id
                     ? "text-foreground font-medium"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {l}
-                {activeSection === l.toLowerCase() && (
+                {item.label}
+                {activeSection === item.id && (
                   <motion.div
                     layoutId="activeSection"
-                    className="absolute -bottom-1 left-0 right-0 h-px bg-foreground"
+                    className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full accent-gradient"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -95,20 +105,20 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background/95 backdrop-blur-2xl border-b border-border px-6 pb-6 flex flex-col gap-4"
+            className="md:hidden bg-background/95 backdrop-blur-xl border-b border-border px-6 pb-6 flex flex-col gap-4"
           >
-            {links.map((l, i) => (
+            {navItems.map((item, i) => (
               <motion.button
-                key={l}
+                key={item.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
-                onClick={() => scrollTo(l)}
+                onClick={() => scrollTo(item.id)}
                 className={`text-left text-sm transition-colors ${
-                  activeSection === l.toLowerCase() ? "text-foreground font-medium" : "text-muted-foreground"
+                  activeSection === item.id ? "text-foreground font-medium" : "text-muted-foreground"
                 }`}
               >
-                {l}
+                {item.label}
               </motion.button>
             ))}
           </motion.div>
