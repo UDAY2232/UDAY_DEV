@@ -37,20 +37,30 @@ const getProjectImage = (repoName: string) => {
   return projectImages[normalized] ?? "/images/default.svg";
 };
 
+const PINNED_REPOS = ["BORINGMAZE"];
+const MAX_REPOS = 6;
+
 const Projects = () => {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://api.github.com/users/UDAY2232/repos?sort=updated&per_page=6")
+    fetch("https://api.github.com/users/UDAY2232/repos?sort=updated&per_page=100")
       .then((r) => r.json())
       .then((data) => {
         const parsed = Array.isArray(data) ? (data as Repo[]) : [];
         const filtered = parsed
           .filter((repo) => !repo.fork)
-          .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-          .slice(0, 6);
-        setRepos(filtered);
+          .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+
+        const pinned = PINNED_REPOS.map((name) => filtered.find((repo) => repo.name.toLowerCase() === name.toLowerCase())).filter(
+          (repo): repo is Repo => Boolean(repo),
+        );
+
+        const pinnedIds = new Set(pinned.map((repo) => repo.id));
+        const remaining = filtered.filter((repo) => !pinnedIds.has(repo.id));
+
+        setRepos([...pinned, ...remaining].slice(0, MAX_REPOS));
         setLoading(false);
       })
       .catch(() => setLoading(false));
